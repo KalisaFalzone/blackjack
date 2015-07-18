@@ -4,6 +4,7 @@ class window.HandView extends Backbone.View
   template: _.template '<h2><% if(isDealer){ %>Dealer<% }else{ %>You<% } %> (<span class="score"></span>)</h2>'
 
   initialize: ->
+    @render()
     @collection.on 'add remove change', =>
       # console.log 'HandView.collection.on add remove change'
       @render()
@@ -16,16 +17,10 @@ class window.HandView extends Backbone.View
       console.log 'HandView.collection.on set'
       @render()
 
-    # @collection.on 'lost', =>
-    #     debugger
-    #     #alert('lost');
-    #     @render()
-    @render()
-
   render: ->
     @$el.children().detach()
     @$el.html @template @collection
     @$el.append @collection.map (card) ->
       new CardView(model: card).$el
-    @$('.score').text @collection.scores()[0]
+    @$('.score').text @collection.score()
 

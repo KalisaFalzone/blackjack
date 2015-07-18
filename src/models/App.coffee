@@ -6,24 +6,30 @@ class window.App extends Backbone.Model
     @set 'playerHand', new Hand [], @get('deck')
     @set 'dealerHand', new Hand [], @get('deck'), true
     @set 'isPlayerTurn', true
+    @set 'outcome', ''
     @playAgain()
-    (@get 'playerHand').on 'lost won', =>
+    (@get 'playerHand').on 'lost', =>
       @set 'isPlayerTurn', false
-      console.log 'You lost or won'
+      @set 'outcome', 'You lost'
+
+    (@get 'playerHand').on 'won', =>
+      @set 'isPlayerTurn', false
+      @set 'outcome', 'You won!'
 
     (@get 'dealerHand').on 'lost', =>
-      console.log 'Dealer lost'
+      @set 'outcome', 'You won!'
 
     (@get 'dealerHand').on 'won', =>
-      console.log 'Dealer won'
+      @set 'outcome', 'You lost'
+
 
     (@get 'playerHand').on 'stand', =>
       @set 'isPlayerTurn', false
-      console.log 'DealerTurn'
       (@get 'dealerHand').autoplay (@get 'playerHand').score()
 
   playAgain: ->
     console.log 'App.playAgain'
+    @set 'outcome', ''
     @set 'isPlayerTurn', true
     @set 'playerHand', @get('deck').dealPlayer (@get 'playerHand')
     @set 'dealerHand', @get('deck').dealDealer (@get 'dealerHand')
