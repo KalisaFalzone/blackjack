@@ -19,10 +19,28 @@ class window.AppView extends Backbone.View
     @model.on 'new-game', ->
         console.log 'ApView.model.on new-game'
         @render
+    @model.on 'change:isPlayerTurn', =>
+        console.log 'change in player turn'
+        #disable hit-button and stand-button
+        if not @model.get('isPlayerTurn')
+          console.log '  is not player turn'
+          $('.hit-button').hide()
+          $('.stand-button').hide()
+          $('.play-again-button').show()
+        else
+          console.log '  is player turn'
+          $('.hit-button').show()
+          $('.stand-button').show()
+          $('.play-again-button').hide()
+    @$el.find('.play-again-button').hide()
+
+
+
 
   render: ->
     @$el.children().detach()
     @$el.html @template()
     @$('.player-hand-container').html new HandView(collection: @model.get 'playerHand').el
     @$('.dealer-hand-container').html new HandView(collection: @model.get 'dealerHand').el
+
 

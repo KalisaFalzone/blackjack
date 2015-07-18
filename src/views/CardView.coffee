@@ -3,7 +3,11 @@ class window.CardView extends Backbone.View
 
   template: _.template '<%= rankName %> of <%= suitName %>'
 
-  initialize: -> @render()
+  initialize: ->
+    @render()
+    @model.on 'change', ->
+        @render()
+      , @
 
   render: ->
     @$el.children().detach()
